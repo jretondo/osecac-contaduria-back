@@ -49,7 +49,8 @@ BankStatement.init({
         allowNull: true
     },
     user_id: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
+        allowNull: true
     }
 }, {
     sequelize,
@@ -60,7 +61,7 @@ BankStatement.init({
 BankStatement.hasMany(Admin, {
     foreignKey: Columns.admin.id,
     sourceKey: Columns.bankStatements.user_id,
-    onDelete: Restrictions.CASCADE,
+    onDelete: Restrictions.SET_NULL,
     onUpdate: Restrictions.CASCADE
 })
 
@@ -72,7 +73,7 @@ Admin.belongsTo(BankStatement, {
 BankStatement.hasMany(MovementType, {
     foreignKey: Columns.movementsType.id,
     sourceKey: Columns.bankStatements.movement_type_id,
-    onDelete: Restrictions.CASCADE,
+    onDelete: Restrictions.SET_NULL,
     onUpdate: Restrictions.CASCADE
 })
 
@@ -84,7 +85,7 @@ MovementType.belongsTo(BankStatement, {
 BankStatement.hasMany(BookBank, {
     foreignKey: Columns.bookBank.id,
     sourceKey: Columns.bankStatements.book_id,
-    onDelete: Restrictions.CASCADE,
+    onDelete: Restrictions.SET_NULL,
     onUpdate: Restrictions.CASCADE
 })
 
@@ -92,5 +93,7 @@ BookBank.belongsTo(BankStatement, {
     foreignKey: Columns.bookBank.id,
     targetKey: Columns.bankStatements.book_id
 })
+
+BankStatement.sync({ alter: true })
 
 export = BankStatement
